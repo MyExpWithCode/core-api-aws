@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Amazon.DynamoDBv2.DataModel;
+using core_api_aws.BLL.DTO;
+using core_api_aws.BLL.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
@@ -6,38 +9,27 @@ namespace core_api_aws.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DynamoTableAccessController : ControllerBase
+    public class StudentsController : ControllerBase
     {
-
-        public DynamoTableAccessController() { }
-
-        [HttpGet("GetAll")]
-        public IActionResult GetAllRecords()
+        private readonly IDynamoDBContext _context;
+        private readonly IStudentService studentService;
+        public StudentsController(IDynamoDBContext context, IStudentService _studentService)
         {
-            return Ok();
-
+            _context = context;
+            studentService=_studentService;
         }
-        [HttpGet("GetBatch")]
-        public async Task GetBatch()
+        [HttpGet("{studentId}")]
+        public async Task<IActionResult> GetById(string studentId)
         {
-
+            var student = await studentService.GetStudentAsync(studentId);
+            if (student == null) return NotFound();
+            return Ok(student);
         }
-
-        [HttpGet("GetItem")]
-        public async Task GetItem()
+        [HttpGet]
+        public async Task<IActionResult> GetAllStudents()
         {
-
-        }
-
-        [HttpPost("AddItem")]
-        public async void AddItem()
-        {
-
-        }
-        [HttpDelete("DeleteItem")]
-        public async void DeleteItem()
-        {
-
+            var student = await studentService.GetAllStudentsAsync();
+            return Ok(student);
         }
 
     }
