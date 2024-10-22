@@ -13,7 +13,7 @@ namespace core_api_aws.Domain.DTO
 
         public string? LastName { get; set; }
 
-        public int Class { get; set; }
+        public int ClassId { get; set; }
 
         public string? Country { get; set; }
     }

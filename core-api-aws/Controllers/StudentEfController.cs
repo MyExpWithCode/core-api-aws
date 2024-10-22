@@ -1,8 +1,5 @@
 ﻿using core_api_aws.BLL.Services;
-using core_api_aws.DAL.DTO;
-using core_api_aws.Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,20 +30,28 @@ namespace core_api_aws.Controllers
 
         // POST api/<StudentEf>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Domain.DTO.Student student)
         {
+            if (student == null) return BadRequest();
+            var id = await studentService.SaveStudentAsync(student);
+            return Created();
         }
 
         // PUT api/<StudentEf>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(string id, [FromBody] Domain.DTO.Student student)
         {
+            if (student == null) return BadRequest();
+            var entryId = await studentService.UpdateStudentAsync(id, student);
+            return NoContent();
         }
 
         // DELETE api/<StudentEf>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            var entryId = await studentService.DeleteStudentAsync(id);
+            return entryId == true ? Accepted(entryId) : new StatusCodeResult(statusCode: 500);
         }
     }
 }

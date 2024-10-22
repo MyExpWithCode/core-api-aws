@@ -7,6 +7,9 @@ namespace core_api_aws.ef.DAL
     {
         
         public DbSet<Student> Students { get; set; }
+        public DbSet<StudentClass> Classes { get; set; }
+
+        public DbSet<ClassHistory> ClassesHistory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
