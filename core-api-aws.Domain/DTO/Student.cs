@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace core_api_aws.BLL.DTO
+namespace core_api_aws.Domain.DTO
 {
     public class Student
     {
+        [Key]
         public string? Id { get; set; }
 
         public string FullName { get { return FirstName! + " " + LastName!; } }

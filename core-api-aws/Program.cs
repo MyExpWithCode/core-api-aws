@@ -24,6 +24,7 @@ namespace core_api_aws
             builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
             builder.Services.AddSingleton<IStudentContext, StudentContext>();
             builder.Services.AddSingleton<IStudentService, StudentService>();
+            builder.Services.AddSingleton<IStudentEFService, StudentEFService>();
             builder.Services.AddSwaggerGen();
             var app = builder.Build();
 
