@@ -1,5 +1,4 @@
-﻿using Amazon.DynamoDBv2.Model.Internal.MarshallTransformations;
-using core_api_aws.Domain.DTO;
+﻿using core_api_aws.Domain.DTO;
 using core_api_aws.ef.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,30 +10,39 @@ namespace core_api_aws.BLL.Services
 
         public async Task<IEnumerable<Student>> GetAllStudentsAsync()
         {
-            return await dbContext.Students.ToListAsync();
+            return await dbContext.Students
+                .Select(x => new Student { FirstName = x.FirstName, LastName = x.LastName, Id = x.Id, Country = x.Country, StudentClass = x.StudentClass.Name })
+                .ToListAsync();
         }
 
         public async Task<Student?> GetStudentAsync(string id)
         {
-            return await dbContext.Students.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await dbContext.Students
+                .Where(x => x.Id == id)
+                .Select(x => new Student { FirstName = x.FirstName, LastName = x.LastName, Id = x.Id, Country = x.Country, StudentClass = x.StudentClass.Name })
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<string> SaveStudentAsync(Student student)
+        public async Task<string> SaveStudentAsync(StudentSaveDto student)
         {
-            var std = await dbContext.Students.AddAsync(student);
+            EF.DTO.Student stdnt = new() { Id = "3", FirstName = student.FirstName, LastName = student.LastName, Country = student.Country, StudentClassId = student.StudentClassId, };
+            var std = await dbContext.Students.AddAsync(stdnt);
             await dbContext.SaveChangesAsync();
             var dbValue = await std.GetDatabaseValuesAsync();
             return dbValue!.GetValue<string>("Id");
         }
 
-        public async Task<string> UpdateStudentAsync(string id, Student student)
+        public async Task<string> UpdateStudentAsync(string id, StudentSaveDto student)
         {
-            var std = await GetStudentAsync(id);
+            var std = await dbContext.Students
+                .Where(x => x.Id == id)
+                .Select(x => new Student { FirstName = x.FirstName, LastName = x.LastName, Id = x.Id, Country = x.Country, StudentClass = x.StudentClass.Name })
+                .FirstOrDefaultAsync();
             if (std == null) throw new Exception($"student with {id} not found.");
 
             std.FirstName = student.FirstName;
             std.LastName = student.LastName;
-            std.Class = student.Class;
+            std.StudentClass = student.StudentClassId.ToString();
             std.Country = student.Country;
 
             await dbContext.SaveChangesAsync();

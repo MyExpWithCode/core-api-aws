@@ -7,8 +7,8 @@ namespace core_api_aws.BLL.Services
     {
         Task<Student?> GetStudentAsync(string id);
         Task<IEnumerable<Student>> GetAllStudentsAsync();
-        Task<string> SaveStudentAsync(Student student);
-        Task<string> UpdateStudentAsync(string id,Student student);
+        Task<string> SaveStudentAsync(StudentSaveDto student);
+        Task<string> UpdateStudentAsync(string id, StudentSaveDto student);
         Task<bool> DeleteStudentAsync(string id);
     }
 }

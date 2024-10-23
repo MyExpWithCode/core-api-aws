@@ -1,13 +1,17 @@
-﻿namespace core_api_aws.Domain.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace core_api_aws.EF.DTO
 {
     public class StudentClass
     {
+        [Key]
         public required int Id { get; set; }
         public required string Name { get; set; }
     }
 
     public class ClassHistory
     {
+        [Key]
         public required int Id { get; set; }
         public int ClassId { get; set; }
         public int Year { get; set; }

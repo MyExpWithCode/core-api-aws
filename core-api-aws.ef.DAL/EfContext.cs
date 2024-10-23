@@ -1,4 +1,4 @@
-﻿using core_api_aws.Domain.DTO;
+﻿using core_api_aws.EF.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace core_api_aws.ef.DAL
